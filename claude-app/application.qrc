@@ -1,0 +1,5 @@
+<RCC>
+    <qresource>
+        <file>ui/claude.qml</file>
+    </qresource>
+</RCC>

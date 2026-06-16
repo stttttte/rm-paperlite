@@ -1,0 +1,38 @@
+# ── macOS / 编辑器垃圾 ──
+.DS_Store
+**/.DS_Store
+.!*
+*.swp
+*~
+
+# ── Python ──
+__pycache__/
+*.pyc
+
+# ── 第三方字体(体积大、可下载;见 fetch-fonts.sh / README「字体来源」) ──
+fonts/
+*.ttf
+*.otf
+
+# ── 下载来的第三方原始包(xovi / appload / koreader 等) ──
+downloads/
+
+# ── 编译产物 / 构建输出(从源码重建) ──
+# bookbridge 传书服务:server/ 下 `GOOS=linux GOARCH=arm GOARM=7 go build` 重建
+server/bookbridge
+server/bookbridge-arm
+device/payload/paperlite/bookbridge
+# 编译好的 QML 资源包(由 .qrc + .qml 用 rcc 生成)
+*.rcc
+
+# ── 第三方原生运行时(xovi/appload 扩展 .so、KOReader 整包) ──
+# 这些不是本项目原创,体积大;装机时按 README「组件来源」从上游获取后组装进 device/payload/
+*.so
+*.so.*
+*.dz
+*.zip
+*.tar.gz
+*.tgz
+device/payload/xovi/exthome/appload/koreader/
+device/payload/xovi/extensions.d/
+device/payload/xovi/inactive-extensions/

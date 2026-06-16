@@ -1,0 +1,91 @@
+; 墨阅 · 主界面侧边栏 "KOReader" 入口（与 AppLoad 同级）
+; 哈希引用克隆自 rm-appload v0.4.1；KOReader 是 qtfb 外部应用，
+; 用自建 AppLoadLibrary 实例调 launchExternal 直接拉起
+
+AFFECT [[4911547370760691430]]
+    IMPORT net.asivery.AppLoad [[180922.180921]]
+    TRAVERSE [[3819512207256720568]] > [[14125623155555875541]]#[[15885405667098360701]]
+        LOCATE AFTER [[3819512207256720568]]#[[4073320026945606142]]
+        INSERT {
+            ~&16385778650434842232&~ {
+                ~&5972374&~: openKOReader
+                ~&8399878573055752961&~: "openKOReader"
+                ~&214642559243&~: "KOReader"
+                ~&8399601734642709923&~: "qrc:/appload/icons/appload"
+                ~&7082453764421&~: ~&214625660372&~
+                ~&233726547792244&~: ~&6504329801&~
+                property var koWindow: null
+
+                AppLoadLibrary {
+                    id: koLibrary
+                }
+
+                ~&254542236275632405&~: {
+                    launchKOReaderDirect();
+                    ~&233744436321411&~.~&6500896584423236548&~();
+                }
+                ~&7081629735527&~.~&17520348323745447649&~: ~&7082020628281&~.~&15061686673205541622&~
+                ~&7081629735527&~.~&7797818826744279624&~: ~&7083038346995&~.~&214646099849&~
+                ~&11921478716705041271&~: ~&233744436321411&~
+
+                function launchKOReaderDirect() {
+                    ~&7083211098251&~();
+                    var view = ~&254540341572282132&~.appLoadView;
+                    view.~&233748328658231&~ = ~&6504329801&~;
+                    if (koWindow) {
+                        koWindow.maximize();
+                        return;
+                    }
+                    var item = view.item;
+                    if (!item) {
+                        Qt.callLater(function() { openKOReader.spawnKOWindow(); });
+                        return;
+                    }
+                    spawnKOWindow();
+                }
+
+                function spawnKOWindow() {
+                    var view = ~&254540341572282132&~.appLoadView;
+                    var item = view.item;
+                    if (!item || koWindow) {
+                        return;
+                    }
+                    if (item.windowArchetype.status !== Component.Ready) {
+                        console.log("[koreader.qmd] window archetype not ready");
+                        return;
+                    }
+                    var qtfbKey = Math.floor(Math.random() * 10000000);
+                    var win = item.windowArchetype.createObject(item.absoluteRoot, { x: 100, y: 100 });
+                    if (win === null) {
+                        console.log("[koreader.qmd] failed to create window");
+                        return;
+                    }
+                    win.appName = "KOReader";
+                    win.supportsScaling = false;
+                    win.disablesWindowedMode = false;
+                    win.globalWidth = Qt.binding(function() { return item.width; });
+                    win.globalHeight = Qt.binding(function() { return item.height; });
+                    win.minWidth = 405;
+                    win.minHeight = 540;
+                    win.implicitWidth = 405;
+                    win.implicitHeight = 540;
+                    win.scaledContentWidth = 1620;
+                    win.scaledContentHeight = 2160;
+                    win.qtfbKey = qtfbKey;
+                    win.closed.connect(function() {
+                        openKOReader.koWindow = null;
+                        win.destroy();
+                    });
+                    win.appPid = koLibrary.launchExternal("external::/home/root/xovi/exthome/appload/koreader", qtfbKey);
+                    koWindow = win;
+                    win.maximize();
+                }
+            }
+        }
+    END TRAVERSE
+    TRAVERSE [[3819512207256720568]]#[[233744436321411]]
+        REBUILD [[15578034235503008618]]
+            LOCATE AFTER STREAM \~&16045040163728568448&~\ INSERT STREAM \, openKOReader\
+        END REBUILD
+    END TRAVERSE
+END AFFECT

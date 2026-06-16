@@ -1,0 +1,16 @@
+# 纸镇 RSS 新闻源 · 每行: 网址 | 名称 | 分类   (# 开头=注释;可在传书页增删)
+# ===== 科技 =====
+https://www.solidot.org/index.rss | 奇客Solidot | 科技
+https://www.ifanr.com/feed | 爱范儿 | 科技
+https://www.ithome.com/rss/ | IT之家 | 科技
+https://sspai.com/feed | 少数派 | 科技
+# ===== 财经 =====
+https://dedicated.wallstreetcn.com/rss.xml | 华尔街见闻 | 财经
+https://36kr.com/feed | 36氪 | 财经
+https://xueqiu.com/hots/topic/rss | 雪球今日话题 | 财经
+https://www.tmtpost.com/rss.xml | 钛媒体 | 财经
+# ===== 体育(经公共 RSSHub 实例,稳定性受其影响)=====
+https://rsshub.rssforever.com/hupu/all/nba | 虎扑NBA | 体育
+https://rsshub.rssforever.com/hupu/all/cba | 虎扑CBA | 体育
+https://rsshub.rssforever.com/hupu/all/yingchao | 虎扑英超 | 体育
+https://rsshub.rssforever.com/dongqiudi/daily | 懂球帝早报 | 体育

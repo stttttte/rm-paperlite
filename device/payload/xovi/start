@@ -1,0 +1,41 @@
+#!/bin/bash
+# 纸镇修改版：drop-in 写 /run/systemd/system（系统分区出厂即满，/etc 写不进）
+# /run 是 tmpfs，重启即清——由 xovi-autostart.service 开机重跑本脚本恢复
+
+shopt -s nullglob
+
+for script in /home/root/xovi/scripts/pre-start/*.sh; do
+    "$script"
+done
+
+restart_services=()
+
+for source_dir in /home/root/xovi/services/*/; do
+    unit=$(basename "$source_dir")
+    target_dir=/run/systemd/system/$unit.d
+
+    mkdir -p "$target_dir"
+    cp -ra "$source_dir/." "$target_dir"
+
+    cat << CONF > "$target_dir/00-xovi.conf"
+[Unit]
+OnFailure=
+
+[Service]
+Environment="LD_PRELOAD=/home/root/xovi/xovi.so"
+Environment="XOVI_ROOT=$source_dir"
+WatchdogSec=0
+CONF
+
+    restart_services+=("$unit")
+done
+
+systemctl daemon-reload
+
+for unit in "${restart_services[@]}"; do
+    systemctl restart "$unit"
+done
+
+for script in /home/root/xovi/scripts/post-start/*.sh; do
+    "$script"
+done

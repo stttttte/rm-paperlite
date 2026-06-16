@@ -1,0 +1,8 @@
+{
+    "name": "传书",
+    "loadsBackend": false,
+    "entry": "/ui/upload.qml",
+    "id": "upload",
+    "supportsScaling": true,
+    "canHaveMultipleFrontends": false
+}

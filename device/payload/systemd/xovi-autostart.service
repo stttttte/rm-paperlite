@@ -1,0 +1,12 @@
+[Unit]
+Description=Start xovi (AppLoad/KOReader) at boot
+After=xochitl.service
+ConditionPathExists=/home/root/xovi/auto-start-enabled
+
+[Service]
+Type=oneshot
+ExecStart=/bin/bash /home/root/xovi/start
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

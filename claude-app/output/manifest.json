@@ -1,0 +1,8 @@
+{
+    "name": "Claude",
+    "loadsBackend": false,
+    "entry": "/ui/claude.qml",
+    "id": "claude",
+    "supportsScaling": true,
+    "canHaveMultipleFrontends": false
+}

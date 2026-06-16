@@ -1,0 +1,11 @@
+[Unit]
+Description=PaperLite book transfer server (zhizhen bookbridge)
+After=network.target
+
+[Service]
+ExecStart=/home/root/paperlite/bookbridge
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
