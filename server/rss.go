@@ -233,9 +233,10 @@ func fetchAndBuildNews(auto bool) (string, int, error) {
 	if err != nil {
 		return "", 0, err
 	}
-	// 写进"新闻"文件夹(sidecar 指定 parent + 刷新)
+	// 入库:优先经原生 :80 即时入库(零重启,落书库根目录);不可达再回退写库+刷新。
+	// (原生 /upload 忽略 parent,无法放进"新闻"文件夹——用户已选"零重启进根目录"。)
 	_ = auto
-	if err := importNewsToFolder(epub, title); err != nil {
+	if err := importBytes(epub, title, "epub", title+".epub", true); err != nil {
 		return "", 0, err
 	}
 	return title, arts, nil

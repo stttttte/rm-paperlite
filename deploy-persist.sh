@@ -30,6 +30,12 @@ if ls "$DIR"/device/payload/paperlite/screensavers/*.png >/dev/null 2>&1; then
     echo "✓ 已推送屏保图库"
 fi
 "${SSH[@]}" 'chmod +x /home/root/paperlite/bookbridge /home/root/xovi/scripts/pre-start/paperlite-mounts.sh'
+# 零重启入库:强制 usb0 带 10.11.99.1,使 xochitl 启动绑定原生 :80 上传服务(详见该文件注释)
+"${SSH[@]}" 'mkdir -p /etc/systemd/network'
+"${SCP[@]}" -q "$DIR/device/payload/etc/systemd/network/09-usb0.network" \
+    "root@$IP:/etc/systemd/network/09-usb0.network"
+"${SSH[@]}" 'networkctl reload 2>/dev/null; networkctl reconfigure usb0 2>/dev/null; sleep 2
+    if ip -o addr show usb0 2>/dev/null | grep -q "10.11.99.1"; then echo "✓ usb0 已带 10.11.99.1（零重启入库就绪，重启 xochitl 后 :80 生效）"; else echo "⚠ usb0 未带 IP，零重启入库可能不生效"; fi'
 echo "✓ 已推送"
 
 say "2/4 迁移整目录挂载→单文件挂载 + 重启(停 xochitl 期间换,避免 umount 占用失败)"

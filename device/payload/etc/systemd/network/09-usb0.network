@@ -1,0 +1,28 @@
+# 墨阅 · 零重启入库的关键配置
+# ─────────────────────────────────────────────────────────────
+# 现象:纯 WiFi 时新增书/新闻要靠 `systemctl restart xochitl` 刷新书库 → 白屏 reloading。
+# 根因:reMarkable 原生 USB 上传服务(http://10.11.99.1/upload,即时入库不重启)由 xochitl
+#       内部提供,但 xochitl 启动时【只在 usb0 上有地址才会启动该 web 服务】。
+#       Mac 走 CDC-ECM 枚举成 usb1 并拿到 10.11.99.1,usb0(RNDIS)始终空着 →
+#       xochitl 日志 "rm.httplistener: No valid hostaddress found" → :80 永不监听 → 只能重启刷新。
+# 解法:强制 usb0 开机就带上 10.11.99.1(即便没有 USB host),xochitl 启动即绑 :80;
+#       bookbridge(设备本机)POST 到 10.11.99.1/upload → 进程内即时入库、零重启、不白屏。
+#
+# AddPrefixRoute=no  关键:不安装 10.11.99.0/27 子网路由,避免与 usb1(Mac 调试时也持同 IP)
+#                    抢路由而掐断 USB-SSH;本机访问 10.11.99.1 走 local 路由不受影响。
+# ConfigureWithoutCarrier=yes  没有 USB host(no-carrier)也照样配地址、置 admin-UP。
+# 仅匹配 usb0,不动 usb1(Mac/DHCP 走 10-usb.network 原样)。文件名 09- 排在 10-usb.network 前。
+[Match]
+Name=usb0
+
+[Link]
+RequiredForOnline=no
+
+[Network]
+ConfigureWithoutCarrier=yes
+IPv6AcceptRA=no
+LinkLocalAddressing=no
+
+[Address]
+Address=10.11.99.1/27
+AddPrefixRoute=no

@@ -84,6 +84,9 @@ EOF
     # 空文件 = systemd 当 masked 处理，必须确认写进去了
     [ -s /etc/systemd/system/bookbridge.service ] || { echo "unit 写入失败：系统分区没空间"; exit 1; }
 '
+# 零重启入库:强制 usb0 带 10.11.99.1,使 xochitl 启动绑定原生 :80 上传服务(详见该文件注释)
+ssh "${SSH_OPTS[@]}" "root@$IP" 'mkdir -p /etc/systemd/network'
+scp "${SSH_OPTS[@]}" "$PAYLOAD/etc/systemd/network/09-usb0.network" "root@$IP:/etc/systemd/network/09-usb0.network"
 echo "✓ 传输完成"
 
 say "4/6 安装传书服务 + 关闭系统自动更新"
@@ -105,6 +108,8 @@ ssh "${SSH_OPTS[@]}" "root@$IP" '
     fi
     systemctl daemon-reload
     systemctl enable --now bookbridge.service
+    # 零重启入库:让 usb0 带上 10.11.99.1(下一步重启 xochitl 后即绑 :80 原生上传服务)
+    networkctl reload 2>/dev/null; networkctl reconfigure usb0 2>/dev/null || true
     # 关掉 OTA，防止升级抹掉一切并堵死安装路线
     systemctl disable --now update-engine 2>/dev/null && echo "✓ update-engine 已禁用" || echo "(未找到 update-engine，跳过)"
     systemctl disable --now swupdate 2>/dev/null || true
