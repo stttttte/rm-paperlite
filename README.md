@@ -15,6 +15,12 @@
 
 不包含：系统界面汉化、中文输入法（KOReader 自身界面就是中文的，阅读场景够用）。
 
+## 姊妹项目：微信读书原生客户端
+
+想在 rM2 上直接看**微信读书**书架（而不是传书进来）？见 **[reweread-rm2](https://github.com/stttttte/reweread-rm2)** —— 把原生微信读书 Qt 客户端 [REweread](https://github.com/nasonliu/REweread) 移植到 reMarkable 2：书架同步、宋体排版、字号/行距可调、目录跳转，设备自己连 WiFi 即可，不用接电脑。
+
+> ⚠️ 该项目衍生自 REweread，采用 **PolyForm 非商业授权**（与本仓库的 MIT 不同，两者协议各自独立，请勿混用）。
+
 ## Claude 终端（clawd.koplugin）
 
 依赖 **Mac 上的 M5 中转在线**（`m5-stopwatch` worktree 的 server，`uvicorn app.main:app --host 0.0.0.0 --port 8000`），rM2 和 Mac 同一 WiFi。
